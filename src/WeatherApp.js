@@ -1,13 +1,11 @@
 import styled from "@emotion/styled";
 import { ThemeProvider } from "@emotion/react";
-
 import { useState, useEffect, useMemo } from "react";
-
-import sunriseAndSunsetData from "./sunrise-sunset.json";
-import WeatherCard from "./WeatherCard";
-import useWeatherApi from "./useWeatherApi ";
-import WeatherSetting from "./WeatherSetting";
 import { findLocation } from "./utils";
+import sunriseAndSunsetData from "./data/sunrise-sunset.json";
+import WeatherSetting from "./components/WeatherSetting";
+import WeatherCard from "./components/WeatherCard";
+import useWeatherApi from "./useWeatherApi";
 
 const theme = {
     light: {
@@ -98,12 +96,12 @@ const WeatherApp = () => {
     const currentLocation = findLocation(currentCity) || {};
     // 把縣市名傳給 custom hooks
     const [weatherElement, fetchData] = useWeatherApi(currentLocation);
+
     // getMoment 原本是用 utils 中的 sunriseCityName，這邊的參數改成縣市了
     const moment = useMemo(
-        () => getMoment(currentLocation.cityName),
-        [currentLocation.cityName]
+        () => getMoment(currentLocation.sunriseCityName),
+        [currentLocation.sunriseCityName]
     );
-
     useEffect(() => {
         if (currentThemeSetting === "on") {
             setCurrentTheme(moment === "day" ? "light" : "dark");
@@ -111,8 +109,6 @@ const WeatherApp = () => {
             setCurrentTheme(currentThemeSetting === "day" ? "light" : "dark");
         }
         // 記得把 moment 放入 dependencies 中
-        // bug : 目前 weatherElement 的 locationName 是 觀測站的名字，而日落日出只有縣市名
-        // weatherElement 應該要用 city 當作 地點?
     }, [moment, currentThemeSetting]);
 
     // 如果改變 currentCity 的值就存起來
