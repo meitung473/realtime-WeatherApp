@@ -1,4 +1,3 @@
-import "normalize.css";
 import "./App.css";
 import WeatherApp from "./WeatherApp";
 

@@ -63,10 +63,14 @@ const weatherCode2Type = (weatherCode) => {
     // weatherCodes 是一個陣列找到符合的 currentWeatherCode
     // 如果沒有就是空的，有的話會拿到 [isClrear,1] 這樣的格式
     //因為 icon 對應的是 tpye 解構只拿 weatherType
-    const [weatherType] = Object.entries(weatherTypes).find(
-        ([weatherType, weatherCodes]) =>
-            weatherCodes.includes(Number(weatherCode)) || []
-    );
+    // 如果沒抓到資料就是空的
+    const [weatherType] =
+        Object.entries(weatherTypes).find(([weatherType, weatherCodes]) =>
+            weatherCodes.includes(Number(weatherCode))
+        ) || [];
+
+    console.log("weatherCode", weatherCode);
+    console.log("weatherType", weatherType);
     return weatherType;
 };
 
@@ -79,6 +83,7 @@ const WeatherIcon = ({ currentWeatherCode, moment }) => {
     );
     useEffect(() => {
         setcurrentWeatherIcon(theWeatherIcon);
+        console.log(theWeatherIcon);
     }, [theWeatherIcon]);
 
     return (
