@@ -6,7 +6,8 @@ import sunriseAndSunsetData from "./data/sunrise-sunset.json";
 import WeatherSetting from "./components/WeatherSetting";
 import WeatherCard from "./components/WeatherCard";
 import useWeatherApi from "./useWeatherApi";
-
+//修正 sarfari 時間格式問題
+import dayjs from "dayjs";
 const theme = {
     light: {
         backgroundColor: "#ededed",
@@ -44,7 +45,7 @@ const getMoment = (locationName) => {
     //找不到的話則回傳 null
     if (!location) return null;
     // 取得當前時間
-    const now = new Date();
+    const now = dayjs();
 
     //將當前時間以 "2022-03-23" 的時間格式呈現
     const nowDate = Intl.DateTimeFormat("zh-TW", {
@@ -60,15 +61,15 @@ const getMoment = (locationName) => {
         location.time.find((time) => time.dataTime === nowDate);
 
     //將日出日落以及當前時間轉成時間戳記（TimeStamp）
-    const sunriseTimestamp = new Date(
+    const sunriseTimestamp = dayjs(
         `${locationDate.dataTime} ${locationDate.sunrise}`
-    ).getTime();
-    const sunsetTimestamp = new Date(
+    ).unix();
+    const sunsetTimestamp = dayjs(
         `${locationDate.dataTime} ${locationDate.sunset}`
-    ).getTime();
+    ).unix();
 
     //目前的時間
-    const nowTimeStamp = now.getTime();
+    const nowTimeStamp = now.unix();
 
     //若當前時間介於日出和日落中間，則表示為白天，否則為晚上
     return sunriseTimestamp <= nowTimeStamp && nowTimeStamp <= sunsetTimestamp
@@ -79,7 +80,7 @@ const WeatherApp = () => {
     //主題色，預設跟著日落日出設定
     const storageTheme = localStorage.getItem("ThemeSetting");
     const [currentTheme, setCurrentTheme] = useState("light");
-    // 使用者自訂色彩
+    // 使用者自訂色彩，on 是按照 moment 來判斷
     const [currentThemeSetting, setCurrentThemeSetting] = useState(
         storageTheme || "on"
     );

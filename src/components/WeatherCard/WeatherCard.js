@@ -84,7 +84,8 @@ const Refresh = styled.div`
     display: inline-flex;
     align-items: flex-end;
     color: ${({ theme }) => theme.textColor};
-
+    pointer-events: ${({ isLoading }) =>
+        isLoading === true ? "none" : "auto"};
     svg {
         margin-left: 10px;
         width: 15px;
